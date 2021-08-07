@@ -88,7 +88,7 @@
 
 </br>
 
-<b> :arrow_forward: 공통 </b>
+ #### <b> :eyes: 공통 </b>
 
  + <b> 프로젝트 생성 </b>
    + File -> New -> Dynamic Web Project 
