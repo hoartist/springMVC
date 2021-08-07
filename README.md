@@ -238,4 +238,163 @@
 
 
  ```
+ 
+ </br></br></br>
+ 
+  #### <b> :eyes: XML로 셋팅하기 </b>
+ 
+ </br>
+ 
+&nbsp;  :star: <b> (1) web.xml 설정 </b>
+
+● <b> DispatcherServlet </b> </br>
+> &nbsp; □ 웹 애플리케이션에서 최초 사용자 요청이 발생하면 가장 먼저 DispatcherServlet이 사용자의 요청을 받는다. </br>
+> &nbsp; □ 따라서 개발자는 DispatcherServlet을 서블릿으로 등록해주는 과정을 설정해주어야 한다. </br>
+> &nbsp; □ (따로 정의해주지 않으면 Apache tomcat의 web.xml에서 정의한 default servlet이 실행하게 된다.) 
+> &nbsp; □ (각 WAS는 서블릿 매핑에 존재하지 않는 요청을 처리하기 위한 디폴트 서블릿을 제공하고 있음) 
+
+</br>
+
+● <b> ApplicationContext 설정 </b> </br>
+> &nbsp; □ Spring MVC로 만든 웹 애플리케이션에서 대한 설정을 하는 파일 </br>
+
+</br>
+
+   <img src="https://user-images.githubusercontent.com/86214493/128593502-5eb392e7-3bb1-490b-9225-edfa387539b3.png" width="50%" height="50%"/>
+  
+
+```xml
+
+	<!-- 현재 웹 애플리케이션에서 받아들이는 모든 요청에 대해 appServlet이라는 이름으로 정의되어 있는 서블릿을 사용 -->
+	<servlet-mapping>
+		<servlet-name>appServlet</servlet-name>
+		<url-pattern>/</url-pattern> <!-- 모든 URL에 접속하면 이 DispatcherServlet이 받는다. -->
+	</servlet-mapping>
+
+	<!-- 요청 정보를 분석해서 컨트롤러를 선택하는 서블릿을 지정 -->
+	<servlet>
+		<servlet-name>appServlet</servlet-name>
+		<!-- Spring MVC에서 제공하고 있는 기본 서블릿을 지정 -->
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		
+		<!-- Spring MVC 설정을 위한 xml 파일을 지정 -->
+		<!-- DispatcherServlet을 등록할 때 초기 파라미터로 스프링 설정파일도 같이 설정 -->
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>/WEB-INF/config/servlet-context.xml</param-value>
+		</init-param>
+		
+		<load-on-startup>1</load-on-startup>
+		
+	</servlet>
+
+
+```
+
+</br></br>
+
+● <b> RootContext 파일 설정 </b> </br>
+> <b> root-context.xml </b>
+> > &nbsp; □ 처음에 프로젝트를 생성하면 아무 내용도 없다. RootContext 파일은 공통 빈을 설정하는 곳으로 주로 View 지원을 제외한 Spring MVC 프로젝트 수행 시 사용할 Bean들을 정의한다. </br>
+> > &nbsp; □ Service/Repository(DAO)/DB/log 등 비지니스 로직과 관련된 설정을 해준다. 
+
+
+<img src="https://user-images.githubusercontent.com/86214493/128593922-73944b0d-6bcf-4eb3-9a6c-e6ca473cfa4d.png" width="35%" height="50%"/>
+
+
+</br>
+
+
+```xml
+
+
+	<!-- Bean을 정의할 xml 파일을 지정한다. -->
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>/WEB-INF/config/root-context.xml</param-value>
+	</context-param>
+
+	<!-- 리스너설정 -->
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+
+```
+
+</br></br>
+
+
+● <b> 파라미터 필터 설정 </b> </br>
+> &nbsp; □ 파라미터에 한글이 있을 경우를 위해 인코딩을 설정한다. </br>
+
+```xml
+	
+<!-- 파라미터 인코딩 필터 설정 -->
+	<filter>
+		<filter-name>encodingFilter</filter-name>
+		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+		<init-param>
+			<param-name>encoding</param-name>
+			<param-value>UTF-8</param-value>
+		</init-param>
+		<init-param>
+			<param-name>forceEncoding</param-name>
+			<param-value>true</param-value>
+		</init-param>
+	</filter>
+
+	<filter-mapping>
+		<filter-name>encodingFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+```
+
+</br> </br> 
+
+&nbsp;  :star: <b> (2) servlet-context.xml (스프링 설정파일) </b>
++ 스프링 설정 파일은 클래스로부터 객체(bean)를 생성하고 조립하는 역할을 한다.
++ DispatcherServlet을 등록할 때 contextConfigLocation 이름으로 초기화 파라미터를 servlet-context.xml로 지정하고 있는데 이때 지정된 servlet-context.xml 파일이 스프링 설정의 역할을 하는 파일이다. 
+
+</br>
+
+![image](https://user-images.githubusercontent.com/86214493/128594208-db3a6e7a-2575-4f0c-9d63-316598328267.png)
+
+</br>
+
+ ●  ```xml <annotation-driven/> ``` </br>
+> &nbsp; □ Spring MVC 컴포넌트들을 디폴트 설정을 통해 활성화한다. </br>
+> &nbsp; □ @Controller에 요청을 보내기 위해 필요한 HandlerMapping과 HandlerAdapter를 Bean으로 등록한다. </br>
+
+</br>
+
+ ●  ```xml <context:component-scan base-package=""/> ``` </br>
+> &nbsp; □ 스캔할 bean들이 모여있는 패키지를 지정한다. </br>
+
+</br>
+
+ <b> ● viewResolver </b> </br>
+ > &nbsp; □ Controller의 메서드에서 반환하는 문자열 앞 뒤에 붙힐 경로 정보를 셋팅한다. 
+ ![image](https://user-images.githubusercontent.com/86214493/128594674-029d237e-ab36-4be4-8891-9cccb84d0cc9.png)
+
+``` xml
+
+	<beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<beans:property name="prefix" value="/WEB-INF/views/"/>
+		<beans:property name="suffix" value=".jsp"/>
+	</beans:bean>
+	
+
+```
+
+</br>
+
+ <b> ● 정적파일 설정 </b> </br>
+ > &nbsp; □ 정적파일(이미지, 사운드, 동영상, JS, CSS 등등) 경로 셋팅  
+ 
+ ![image](https://user-images.githubusercontent.com/86214493/128594776-8f32fc72-4128-475d-9869-bdcc5f101d23.png)
+
+
+
+
 
