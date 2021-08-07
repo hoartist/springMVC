@@ -362,19 +362,19 @@
 
 </br>
 
- ●  ```xml <annotation-driven/> ``` </br>
-> &nbsp; □ Spring MVC 컴포넌트들을 디폴트 설정을 통해 활성화한다. </br>
-> &nbsp; □ @Controller에 요청을 보내기 위해 필요한 HandlerMapping과 HandlerAdapter를 Bean으로 등록한다. </br>
++  ``` <annotation-driven/> ``` </br>
+	+ Spring MVC 컴포넌트들을 디폴트 설정을 통해 활성화한다. </br>
+	+ @Controller에 요청을 보내기 위해 필요한 HandlerMapping과 HandlerAdapter를 Bean으로 등록한다. </br>
 
 </br>
 
- ●  ```xml <context:component-scan base-package=""/> ``` </br>
-> &nbsp; □ 스캔할 bean들이 모여있는 패키지를 지정한다. </br>
++ ``` <context:component-scan base-package=""/> ``` </br>
+	+ 스캔할 bean들이 모여있는 패키지를 지정한다. </br>
 
 </br>
 
- <b> ● viewResolver </b> </br>
- > &nbsp; □ Controller의 메서드에서 반환하는 문자열 앞 뒤에 붙힐 경로 정보를 셋팅한다. 
+ + <b> viewResolver </b> </br>
+	+ Controller의 메서드에서 반환하는 문자열 앞 뒤에 붙힐 경로 정보를 셋팅한다. 
  ![image](https://user-images.githubusercontent.com/86214493/128594674-029d237e-ab36-4be4-8891-9cccb84d0cc9.png)
 
 ``` xml
@@ -389,12 +389,169 @@
 
 </br>
 
- <b> ● 정적파일 설정 </b> </br>
- > &nbsp; □ 정적파일(이미지, 사운드, 동영상, JS, CSS 등등) 경로 셋팅  
+ + <b> 정적파일 설정
+ 	+ 정적파일(이미지, 사운드, 동영상, JS, CSS 등등) 경로 셋팅  
  
  ![image](https://user-images.githubusercontent.com/86214493/128594776-8f32fc72-4128-475d-9869-bdcc5f101d23.png)
 
+ </br></br></br>
+ 
+  #### <b> :eyes: Java로 셋팅하기 </b>
+
+</br>
+
+&nbsp;  :star: <b> (1) web.xml 설정 -> 방법 1 : WebApplicationInitializer 인터페이스 구현 </b>
++ onStartUp 메서드를 구현 
+
+</br>
+
++ String MVC 프로젝트 설정을 위해 작성하는 클래스의 객체를 생성
+
+```java
+
+	AnnotationConfigWebApplicationContext servletAppContext = new AnnotationConfigWebApplicationContext();
+	servletAppContext.register(ServletAppContext.class);	
+
+```
+
+</br>
+
++ 요청 발생 시 요청을 처리하는 서블릿을 DispatcherServlet으로 설정한다. 
 
 
+```java
+	
+	DispatcherServlet dispatcherServlet = new DispatcherServlet(servletAppContext);
+	ServletRegistration.Dynamic servlet = servletContext.addServlet("dispatcher", dispatcherServlet); 
+	
+	// 부가 설정
+	servlet.setLoadOnStartup(1); //가장 먼저 로드하겠다.
+	servlet.addMapping("/"); // url 매핑시 '/*'로 지정하면 안된다.
+	
+```
 
++ bean을 정의하는 클래스를 지정 (root-context.xml) 
+
+```java
+
+	AnnotationConfigWebApplicationContext rootAppContext = new AnnotationConfigWebApplicationContext();
+	rootAppContext.register(RootAppContext.class);
+
+	// 리스터 설정
+	ContextLoaderListener listener = new ContextLoaderListener(rootAppContext);
+	servletContext.addListener(listener);
+	
+```
+
+</br>
+
++ 파라미터 인코딩 설정
+
+```java
+
+	FilterRegistration.Dynamic filter = servletContext.addFilter("encodingFilter", CharacterEncodingFilter.class);
+	filter.setInitParameter("encoding", "UTF-8");
+	filter.addMappingForServletNames(null, false, "dispatcher");
+	
+```
+
+</br>
+</br>
+
+&nbsp;  :star: <b> (2) web.xml 설정 -> 방법 2 : AbstractAnnotationConfigDispatcherServletInitializer 상속 </b>
++ Spring 3.2부터 추가된 클래스 
++ WebApplicationInitializer 보다 사용하기 쉽지만 이미 구현된 것을 가져다 쓰는 것이기 때문에 새로운 내용을 추가로 수정해서 사용하기가 어려움
+
+```java
+	
+	
+public class SpringConfigClass extends AbstractAnnotationConfigDispatcherServletInitializer{
+
+	//DispatcherServlet에 매핑할 요청 주소를 셋팅한다.
+	@Override
+	protected String[] getServletMappings() {
+		return new String[] {"/"};
+	}
+	
+	//Spring MVC 프로젝트 설정을 위한 클래스를 지정한다. 
+	@Override
+	protected Class<?>[] getServletConfigClasses() {
+		return new Class[] {ServletAppContext.class};
+	}
+	
+	//프로젝트에서 사용할 Bean들을 정의하기 위한 클래스를 지정한다.
+	@Override
+	protected Class<?>[] getRootConfigClasses() {
+		return new Class[] {RootAppContext.class};
+	}
+	
+	//파라미터 인코딩 필터 설정
+	@Override
+	protected Filter[] getServletFilters() {
+		CharacterEncodingFilter encodingFilter = new CharacterEncodingFilter();
+		encodingFilter.setEncoding("UTF-8");
+		return new Filter[] {encodingFilter};
+	}
+	
+}
+
+
+```
+
+</br>
+</br>
+
+&nbsp;  :star: <b> (3) servlet-context.xml -> WebMvcConfigurer 인터페이스 구현 </b>
+
++ @Configuration
+	+ 어노테이션기반 환경구성을 돕는다.
+	+ 이 어노테이션을 구현함으로써 클래스가 하나 이상의 @Bean 메소드를 제공하고 스프링 컨테이너가 Bean 정의를 생성하고 런타임시 그 Bean들이 요청들을 처리할 것을 선언하게 된다.
+
++ @EnableWebMvc
+	+ @EnableWebMvc 어노테이션을 사용하면 Spring Framework에서 여러 Config 값을 알아서 셋팅해준다.
+	
++ @ComponentScan
+	+ 스캔할 패키지를 지정 
+
+</br>
+
+```java
+
+//Spring MVC 프로젝트에 관련된 설정을 하는 클래스
+@Configuration
+@EnableWebMvc // <- Controller 어노테이션이 셋팅되어 있는 클래스를 Controller로 등록한다.
+@ComponentScan("chap02.controller") // <- 스캔할 패키지를 지정
+public class ServletAppContext implements WebMvcConfigurer{
+	
+	//Controller의 메서드가 반환하는 jsp의 이름 앞뒤에 경로와 확장자를 붙여주도록 설정한다.
+	@Override
+	public void configureViewResolvers(ViewResolverRegistry registry) {
+		WebMvcConfigurer.super.configureViewResolvers(registry);
+		registry.jsp("/WEB-INF/views/",".jsp");
+	}
+	
+	//정적파일의 경로를 매핑한다.
+	@Override
+	public void addResourceHandlers(ResourceHandlerRegistry registry) {
+		WebMvcConfigurer.super.addResourceHandlers(registry);
+		registry.addResourceHandler("/**").addResourceLocations("/resources/");
+	}
+	
+}
+
+```
+
+</br>
+</br>
+
+&nbsp;  :star: <b> (4) root-context.xml -> 상속없음 </b>
+
+```java
+	//프로젝트 작업시 사용할 bean을 정의하는 클래스
+	@Configuration
+	public class RootAppContext {
+
+	}
+
+```
 
