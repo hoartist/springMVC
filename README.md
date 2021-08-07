@@ -69,6 +69,173 @@
 12. 결과적으로 DispatcherServlet이 클라이언트에게 렌더링된 View를 응답한다. 
 
 
+</br></br></br>
+
+## :bulb: 02. 프로젝트 셋팅
+
+</br></br>
+
+<b> :arrow_forward: DispatcherServlet </b>
+
+> + Servlet/JSP에서 사용자 요청이 발생하면 이 요청 정보를 해석하고 개발자가 만든 코드를 동작시키는 첫번째 서블릿이다.
+> + Spring MVC는 DispatcherServlet을 확대하여 Spring Framework가 가지고 있는 기능을 사용할 수 있도록 이 클래스를 재정의하고 있다.
+> + Spring MVC 프로젝트 설정에서 가장 먼저 해야 하는 일은 DispatcherServlet 클래스를 Spring MVC에서 재정의한 클래스로 설정하는 일이다. 
+
+</br>
+
+<b> :arrow_forward: 설정 방식 </b>
+> + Spring MVC 프로젝트를 설정하는 방식은 XML을 이용하는 방법과 Java 코드를 활용하는 방법이 있다.
+
+</br>
+
+<b> :arrow_forward: 공통 </b>
+
+ + <b> 프로젝트 생성 </b>
+   + File -> New -> Dynamic Web Project 
+   + 프로젝트 마우스 오른쪽 버튼 -> Configure -> Convert to Maver Project
+
+</br>
+
+<img src="https://user-images.githubusercontent.com/86214493/128590537-ae98229f-f447-485c-815d-14dde9df1e3f.png" width="40%" height="50%"/>
+<img src="https://user-images.githubusercontent.com/86214493/128590543-191c1e10-3ed1-46c0-8122-e593d9677a97.png" width="40%" height="50%"/>
+<img src="https://user-images.githubusercontent.com/86214493/128590552-4080ee51-dbf3-42db-8e58-ab8f80b05c84.png" width="40%" height="50%"/>
+
+</br>
+
+ + <b> pom.xml </b>
+
+ <b> &nbsp;  &nbsp; &nbsp; □ servlet-api </b>
+ 
+ </br>
+ 
+<img src="https://user-images.githubusercontent.com/86214493/128590784-efc9dda5-0d56-4419-8cdf-0a98108005d5.png" width="40%" height="50%"/>
+    
+</br>
+    
+ ```xml
+     <!-- https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api -->
+     <dependency>
+        <groupId>javax.servlet</groupId>
+        <artifactId>javax.servlet-api</artifactId>
+        <version>4.0.1</version>
+        <scope>provided</scope>
+     </dependency>
+ ```
+    
+ </br></br>
+    
+ <b> &nbsp; &nbsp;  &nbsp; □ jsp-api </b>
+ 
+ </br>
+ 
+ <img src="https://user-images.githubusercontent.com/86214493/128590847-d80cab62-fd45-40fc-be7d-63313c34ad97.png" width="40%" height="50%"/>
+    
+ </br>
+    
+ ```xml
+
+    <!-- https://mvnrepository.com/artifact/javax.servlet.jsp/javax.servlet.jsp-api -->
+   <dependency>
+       <groupId>javax.servlet.jsp</groupId>
+       <artifactId>javax.servlet.jsp-api</artifactId>
+       <version>2.3.3</version>
+       <scope>provided</scope>
+   </dependency>
+
+ ```
+
+  </br></br>
+
+  <b> &nbsp; &nbsp; &nbsp; □  jstl </b>
+    
+   </br>
+   
+   <img src="https://user-images.githubusercontent.com/86214493/128590898-891368fe-e419-4394-b4f2-fba42a721988.png" width="40%" height="50%"/>
+   
+   </br>
+   
+   ```xml
+   
+    <!-- https://mvnrepository.com/artifact/javax.servlet/jstl -->
+    <dependency>
+        <groupId>javax.servlet</groupId>
+        <artifactId>jstl</artifactId>
+        <version>1.2</version>
+    </dependency>
+    
+   ```
+   </br></br>
 
 
+ <b> &nbsp; &nbsp; □ Spring Web Mvc </b>
+    
+   </br>
+   
+  <img src="https://user-images.githubusercontent.com/86214493/128590934-6262e5a8-c327-4155-a982-6f287244f70e.png" width="40%" height="50%"/>
+   
+   </br>
+
+   ```xml
+    
+    <!-- https://mvnrepository.com/artifact/org.springframework/spring-webmvc -->
+   <dependency>
+       <groupId>org.springframework</groupId>
+       <artifactId>spring-webmvc</artifactId>
+       <version>5.2.2.RELEASE</version>
+   </dependency>
+
+   ```
+
+</br></br>
+
+ + 정리
+ 
+ ```xml
+ 
+  <!-- 라이브러리 버전관리 -->
+	<properties>
+   <javax.servlet-version>4.0.1</javax.servlet-version>
+   <javax.servlet.jsp-version>2.3.3</javax.servlet.jsp-version>
+   <javax.servlet-version>1.2</javax.servlet-version>
+   <org.springframework-version>5.2.2.RELEASE</org.springframework-version>
+   <!-- <org.springframework-version>4.3.25.RELEASE</org.springframework-version> -->
+	</properties>
+
+	<!-- 라이브러리 셋팅 -->
+	<dependencies>
+
+		<!-- https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api -->
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<version>4.0.1</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/javax.servlet.jsp/javax.servlet.jsp-api -->
+		<dependency>
+			<groupId>javax.servlet.jsp</groupId>
+			<artifactId>javax.servlet.jsp-api</artifactId>
+			<version>${javax.servlet.jsp-version}</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/javax.servlet/jstl -->
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>jstl</artifactId>
+			<version>${javax.servlet-version}</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.springframework/spring-webmvc -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-webmvc</artifactId>
+			<version>5.2.2.RELEASE</version>
+		</dependency>
+
+	</dependencies>
+
+
+ ```
 
