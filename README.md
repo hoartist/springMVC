@@ -625,3 +625,32 @@ public class ServletAppContext implements WebMvcConfigurer{
 	
 ```
 
+</br>
+</br>
+</br>
+
+
+## :bulb: 04. HTTP 메소드 / 요청 방식
+&nbsp;  :star: <b> (1) 요청 방식 지정하기 </b>
++ <b> GET </b> 
+	- 요청 받은 URI의 정보를 검색하여 응답한다. 
++ <b> HEAD </b>
+	- GET 방식과 동일하지만, 응답에 BODY가 없고 응답코드와 HEAD만 응답한다.
++ <b> POST </b>
+	- 요청된 자원을 생성한다. 
++ <b> PUT </b>
+	- 요청된 자원을 수정한다. 
++ <b> PATCH </b>
+	- 요청된 자원을 수정한다. PUT의 경우 전체를 갱신하지만 Patch는 자원의 일부를 수정할 때 사용한다.
++ <b> DELETE </b>
+	- 요청된 자원을 삭제한다. 
+
+
+&nbsp; <b> (2) 요청 방식 지정하기 </b>
++ Spring MVC는 요청 주소별로 메서드를 정의할 수도 있지만 같은 요청 주소에서 요청 방식에 따라 메서드를 정의할 수도 있다.
++ GET, POST, PUT, DELETE, PATCH에 대해 처리할 수 있다. 
+
+
+&nbsp; <b> (3) @RequestMapping  </b>
+
+
