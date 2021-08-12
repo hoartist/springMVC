@@ -949,6 +949,19 @@ public class ServletAppContext implements WebMvcConfigurer{
 
 <img src="https://user-images.githubusercontent.com/86214493/129202910-d591bb1a-ddab-479e-be47-d3c87393a881.png" width="45%" height="45%">
 
+</br>
+</br>
+</br>
+
+## :bulb: 06. 객체로 파라미터 주입받기
+
+&nbsp; :star: <b> (1) Map으로 주입받기 </b>
++ 클라이언트가 전달하는 모든 파라미터 데이터를 한번에 Map으로 받을 수 있다.
++ 단 동일 명으로 전달되는 2개 이상의 파라미터는 하나만 담기게 된다.
++ 동일 명으로 전달되는 파라미터가 2개 이상이라면 List로 주입받아야 한다.
+
+
+
 
 
 
