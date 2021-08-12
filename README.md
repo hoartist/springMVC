@@ -654,8 +654,6 @@ public class ServletAppContext implements WebMvcConfigurer{
 &nbsp; <b> (3) @RequestMapping  </b>
 + RequestMapping 어노테이션은 요청 주소 셋팅 뿐만 아니라 요청 방식도 설정할 수 있다. 
 
-</br>
-
 ```java
 
 	@RequestMapping(value="/chap04/test1", method= RequestMethod.GET)
@@ -689,8 +687,6 @@ public class ServletAppContext implements WebMvcConfigurer{
 + RequestMapping 대신 요청별로 제공되는 어노테이션을 사용할 수 있다.
 + Spring 4.3 버전에 추가된 내용 
 
-</br>
-
 ```java
 	
 	@GetMapping("/chap04/test6")
@@ -709,7 +705,6 @@ public class ServletAppContext implements WebMvcConfigurer{
 
 + 동시에 처리하기
 
-</br>
 
 ```java
 
@@ -740,5 +735,12 @@ public class ServletAppContext implements WebMvcConfigurer{
 
 
 ```
+
+</br>
+</br>
+</br>
+
+## :bulb: 05. 파라미터 추출하기
+
 
 
