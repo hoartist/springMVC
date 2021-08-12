@@ -654,8 +654,6 @@ public class ServletAppContext implements WebMvcConfigurer{
 &nbsp; <b> (3) @RequestMapping  </b>
 + RequestMapping 어노테이션은 요청 주소 셋팅 뿐만 아니라 요청 방식도 설정할 수 있다. 
 
-</br>
-
 ```java
 
 	@RequestMapping(value="/chap04/test1", method= RequestMethod.GET)
@@ -689,8 +687,6 @@ public class ServletAppContext implements WebMvcConfigurer{
 + RequestMapping 대신 요청별로 제공되는 어노테이션을 사용할 수 있다.
 + Spring 4.3 버전에 추가된 내용 
 
-</br>
-
 ```java
 	
 	@GetMapping("/chap04/test6")
@@ -709,7 +705,6 @@ public class ServletAppContext implements WebMvcConfigurer{
 
 + 동시에 처리하기
 
-</br>
 
 ```java
 
@@ -740,5 +735,221 @@ public class ServletAppContext implements WebMvcConfigurer{
 
 
 ```
+
+</br>
+</br>
+</br>
+
+## :bulb: 05. 파라미터 추출하기
+
+&nbsp; :star: <b> (1) HttpServletRequest 사용 </b>
+
++ 모든 파라미터는 HttpServletRequest에 담긴다.
++ Spring MVC는 필요한 객체나 데이터를 주입받아 사용할 수 있음 
++ Servlet / JSP 에서는 파라미터 데이터를 추출할 때 HttpServletRequest 객체를 통하게 되는데 Spring MVC 에서는 이 객체를 주입 받아 사용할 수 있음
++ 파라미터 추출 뿐만 아니라 HttpServlertRequest 객체가 필요한 경우 주입받아 사용할 수 있음 
+
+</br>
+
+```html
+	<h4><a href="chap05/test1?data1=100&data2=200&data3=300&data3=400">test1</a></h4>
+```
+
+```java
+
+	@GetMapping("/chap05/test1")
+	public String test1(HttpServletRequest request) {
+		
+		String data1 = request.getParameter("data1");
+		String data2 = request.getParameter("data2");
+		String[] data3 = request.getParameterValues("data3");
+		
+		System.out.println("data1 : " + data1);
+		System.out.println("data2 : " + data2);
+		
+		for(String str : data3) {
+			System.out.println("data3 : "+str);
+		}
+		
+		return "/chap05/result";
+	}
+	
+
+```
+
+<img src="https://user-images.githubusercontent.com/86214493/129195020-2cf91336-7e71-4dde-a181-65877573aad8.png" width="45%" height="45%">
+
+
+</br>
+
+&nbsp; :star: <b> (2) WebRequest 사용 </b>
++ WebRequest는 HttpServletRequest 클래스를 확장한 클래스이다.
+
+```html	
+	<h4><a href="chap05/test2?data1=10&data2=20&data3=30&data3=40">test2</a></h4>
+```
+
+```java
+
+	@GetMapping("/chap05/test2")
+	public String test2(WebRequest request) {
+		String data1 = request.getParameter("data1");
+		String data2 = request.getParameter("data2");
+		String[] data3 = request.getParameterValues("data3");
+		
+		System.out.println("data1 : " + data1);
+		System.out.println("data2 : " + data2);
+		
+		for(String str : data3) {
+			System.out.println("data3 : "+str);
+		}
+		return "/chap05/result";
+	}
+	
+```
+
+<img src="https://user-images.githubusercontent.com/86214493/129196309-565a7e96-0b25-4a0d-8d27-21075ff3e679.png" width="45%" height="45%">
+
+</br>
+
+&nbsp; :star: <b> (3) @PathVariable </b>
++ 데이터가 요청 주소에 있을 경우 값을 주입 받을 수 있는 어노테이션
++ Request API 서버 프로그래밍시 많이 사용하는 방식
++ 요청주소/값1/값2/값3
++ 자동형변환 가능 (원래 모든 파라미터는 String 형태로 넘어옴)
+
+```html
+	<h4><a href="chap05/test3/1000/2000/3000/4000">test3</a></h4>
+```
+
+```java
+	
+	@GetMapping("chap05/test3/{data1}/{data2}/{data3}/{data4}")
+	public String test3(@PathVariable int data1, @PathVariable int data2, 
+			    @PathVariable String data3, @PathVariable String data4) {
+	
+		int sum = data1 + data2;
+		
+		System.out.println("data1 : "+data1);
+		System.out.println("data2 : "+data2);
+		System.out.println("sum : " + sum);
+		System.out.println("data3 : "+data3);
+		System.out.println("data4 : "+data4);
+		
+		return "/chap05/result";
+	}
+	
+```
+
+<img src="https://user-images.githubusercontent.com/86214493/129197974-d805fb4c-1d60-4ad8-ba97-698b15bcbfe1.png" width="45%" height="45%">
+
+
+</br>
+
+&nbsp; :star: <b> (4) @RequestParam </b>
++ 파라미터 데이터를 직접 주입받을 수 있음 
++ 지정된 변수의 이름과 파라미터의 이름이 같을 경우 값을 주입받는다.
++ 가능한 경우 형 변환도 처리해준다.
+
+</br>
+
+```html
+	<h4><a href="chap05/test4?data1=100&data2=200&data3=300">test4</a></h4>
+```
+
+```java
+	
+	@GetMapping("chap05/test4")
+	public String test4(@RequestParam int data1, @RequestParam int data2,
+			    @RequestParam int data3) {
+			    
+		int add = data1 + data2 + data3;
+		System.out.println("add : "+add);
+		
+		return "/chap05/result";
+	}
+```
+
+<img src="https://user-images.githubusercontent.com/86214493/129199644-6366c622-0506-4455-8acc-95975dae4b71.png" width="45%" height="45%">
+
+
+</br>
+
++ <b> value 속성 : </b> 파라미터의 이름과 변수의 이름이 다를 경우 파라미터 이름을 지정한다. 
+
+```html
+	<h4><a href="chap05/test4?data1=10&data2=20&data3=30">test5</a></h4>
+```
+
+```java
+	
+	@GetMapping("chap05/test5")
+	public String test5(@RequestParam(value="data1") int value1, @RequestParam(value="data2") int value2,
+			    @RequestParam(value="data3") int value3) {
+		
+		int add = value1 + value2 + value3;
+		System.out.println("add : "+add);
+		
+		return "/chap05/result";
+	}
+	
+```
+
+<img src="https://user-images.githubusercontent.com/86214493/129200493-19c344ba-c6df-4db0-9cf1-9fb6977092dc.png" width="45%" height="45%">
+
++ 만약 넘어오지 않은 데이터를 받는다면 오류가 발생한다.
+
+```html
+	<h4><a href="chap05/test6">test6</a></h4>
+```
+
+```java
+	@GetMapping("chap05/test6")
+	public String test6(@RequestParam String data1) {
+		
+		if(data1 != null) {
+			System.out.println("data1");
+		}
+		
+		return "/chap05/result";
+	}
+```
+
+<img src="https://user-images.githubusercontent.com/86214493/129201440-c5a540a6-f147-4d1b-bc0f-0f021e38935a.png" width="45%" height="45%">
+
++  <b> required 속성 : false를 설정하면 지정된 이름의 파라미터가 없을 경우 null 주입된다. </b>
+
+```java
+	
+	@GetMapping("chap05/test6")
+	public String test7(@RequestParam(required = false) String data1) {
+		
+		System.out.println("data1 : "+data1);
+		
+		return "/chap05/result";
+	}
+	
+
+```
+
+<img src="https://user-images.githubusercontent.com/86214493/129202306-c798ad93-5550-4c76-b5bc-69d8882b142f.png" width="45%" height="45%">
+
+
++  <b> defaultValue 속성 : 넘어온 데이터가 없을 때 기본으로 주입할 데이터를 설정 </b>
+
+```java
+	
+	@GetMapping("chap05/test6")
+	public String test6(@RequestParam(defaultValue = "700") int data1 ) {
+		System.out.println("data1 : "+data1);
+		return "/chap05/result";
+	}
+	
+```
+
+<img src="https://user-images.githubusercontent.com/86214493/129202910-d591bb1a-ddab-479e-be47-d3c87393a881.png" width="45%" height="45%">
+
+
+
 
 
