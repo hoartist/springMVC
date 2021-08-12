@@ -74,5 +74,15 @@
 	<form action="chap04/test8" method="post">
 		<button type="submit">test8 POST</button>
 	</form>
+	
+	<hr>
+	
+	<h2>Chap05</h2>
+	<h4><a href="chap05/test1?data1=100&data2=200&data3=300&data3=400">test1</a></h4>
+	<h4><a href="chap05/test2?data1=10&data2=20&data3=30&data3=40">test2</a></h4>
+	<h4><a href="chap05/test3/1000/2000/3000/4000">test3</a></h4>
+	<h4><a href="chap05/test4?data1=100&data2=200&data3=300">test4</a></h4>
+	<h4><a href="chap05/test5?data1=10&data2=20&data3=30">test5</a></h4>
+	<h4><a href="chap05/test6">test6</a></h4>
 </body>
 </html>
