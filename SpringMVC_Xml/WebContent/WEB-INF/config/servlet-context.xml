@@ -17,7 +17,7 @@
 	<context:component-scan base-package="chap02.controller"/>
 	<context:component-scan base-package="chap03.controller"/>
 	<context:component-scan base-package="chap04.controller"/>
-	
+	<context:component-scan base-package="chap05.controller"/>
 	
 	<!-- Controller의 메서드에서 반환하는 문자열 앞 뒤에 붙힐 경로 정보를 셋팅한다. -->
 	<beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
