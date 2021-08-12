@@ -652,5 +652,93 @@ public class ServletAppContext implements WebMvcConfigurer{
 
 
 &nbsp; <b> (3) @RequestMapping  </b>
++ RequestMapping 어노테이션은 요청 주소 셋팅 뿐만 아니라 요청 방식도 설정할 수 있다. 
+
+</br>
+
+```java
+
+	@RequestMapping(value="/chap04/test1", method= RequestMethod.GET)
+	public String test1_get() {
+		return "/chap04/test1";
+	}
+	
+	
+	@RequestMapping(value="/chap04/test2",method=RequestMethod.POST)
+	public String test2_post() {
+		return "/chap04/test2";
+	}
+
+```
+
++ Get과 Post를 동시에 설정하는 것도 가능하다. 
+
+```java
+	
+	@RequestMapping(value="/chap04/test7",method= {RequestMethod.GET, RequestMethod.POST})
+	public String test7() {
+		return "/chap04/test7";
+	}
+
+```
+
+</br>
+</br>
+
+&nbsp; <b> (4) @GetMapping / @PostMapping  </b>
++ RequestMapping 대신 요청별로 제공되는 어노테이션을 사용할 수 있다.
++ Spring 4.3 버전에 추가된 내용 
+
+</br>
+
+```java
+	
+	@GetMapping("/chap04/test6")
+	public String test6_get() {
+		return "/chap04/test6_get";
+	}
+	
+	@PostMapping("/chap04/test6")
+	public String test6_post() {
+		return "/chap04/test6_post";
+	}
+
+```
+
+</br>
+
++ 동시에 처리하기
+
+</br>
+
+```java
+
+	/*
+	-> 오류
+	@GetMapping("/chap04/test8")
+	public String test8_get() {
+		return "/chap04/test8";
+	}
+	
+	@GetMapping("/chap04/test8")
+	public String test8_post() {
+		return "/chap04/test8";
+	}
+	
+	*/
+	
+	/* ↓ 나중에 파라미터를 주입받을 때 불편할 수 있음 */ 
+	@GetMapping("/chap04/test8")
+	public String test8_get() {
+		return test8_post();
+	}
+	
+	@PostMapping("/chap04/test8")
+	public String test8_post() {
+		return "/chap04/test8";
+	}
+
+
+```
 
 
