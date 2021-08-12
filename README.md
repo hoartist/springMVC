@@ -625,3 +625,120 @@ public class ServletAppContext implements WebMvcConfigurer{
 	
 ```
 
+</br>
+</br>
+</br>
+
+
+## :bulb: 04. HTTP 메소드 / 요청 방식
+&nbsp;  :star: <b> (1) 요청 방식 지정하기 </b>
++ <b> GET </b> 
+	- 요청 받은 URI의 정보를 검색하여 응답한다. 
++ <b> HEAD </b>
+	- GET 방식과 동일하지만, 응답에 BODY가 없고 응답코드와 HEAD만 응답한다.
++ <b> POST </b>
+	- 요청된 자원을 생성한다. 
++ <b> PUT </b>
+	- 요청된 자원을 수정한다. 
++ <b> PATCH </b>
+	- 요청된 자원을 수정한다. PUT의 경우 전체를 갱신하지만 Patch는 자원의 일부를 수정할 때 사용한다.
++ <b> DELETE </b>
+	- 요청된 자원을 삭제한다. 
+
+
+&nbsp; <b> (2) 요청 방식 지정하기 </b>
++ Spring MVC는 요청 주소별로 메서드를 정의할 수도 있지만 같은 요청 주소에서 요청 방식에 따라 메서드를 정의할 수도 있다.
++ GET, POST, PUT, DELETE, PATCH에 대해 처리할 수 있다. 
+
+
+&nbsp; <b> (3) @RequestMapping  </b>
++ RequestMapping 어노테이션은 요청 주소 셋팅 뿐만 아니라 요청 방식도 설정할 수 있다. 
+
+</br>
+
+```java
+
+	@RequestMapping(value="/chap04/test1", method= RequestMethod.GET)
+	public String test1_get() {
+		return "/chap04/test1";
+	}
+	
+	
+	@RequestMapping(value="/chap04/test2",method=RequestMethod.POST)
+	public String test2_post() {
+		return "/chap04/test2";
+	}
+
+```
+
++ Get과 Post를 동시에 설정하는 것도 가능하다. 
+
+```java
+	
+	@RequestMapping(value="/chap04/test7",method= {RequestMethod.GET, RequestMethod.POST})
+	public String test7() {
+		return "/chap04/test7";
+	}
+
+```
+
+</br>
+</br>
+
+&nbsp; <b> (4) @GetMapping / @PostMapping  </b>
++ RequestMapping 대신 요청별로 제공되는 어노테이션을 사용할 수 있다.
++ Spring 4.3 버전에 추가된 내용 
+
+</br>
+
+```java
+	
+	@GetMapping("/chap04/test6")
+	public String test6_get() {
+		return "/chap04/test6_get";
+	}
+	
+	@PostMapping("/chap04/test6")
+	public String test6_post() {
+		return "/chap04/test6_post";
+	}
+
+```
+
+</br>
+
++ 동시에 처리하기
+
+</br>
+
+```java
+
+	/*
+	-> 오류
+	@GetMapping("/chap04/test8")
+	public String test8_get() {
+		return "/chap04/test8";
+	}
+	
+	@GetMapping("/chap04/test8")
+	public String test8_post() {
+		return "/chap04/test8";
+	}
+	
+	*/
+	
+	/* ↓ 나중에 파라미터를 주입받을 때 불편할 수 있음 */ 
+	@GetMapping("/chap04/test8")
+	public String test8_get() {
+		return test8_post();
+	}
+	
+	@PostMapping("/chap04/test8")
+	public String test8_post() {
+		return "/chap04/test8";
+	}
+
+
+```
+
+
