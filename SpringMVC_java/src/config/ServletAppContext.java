@@ -11,7 +11,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 @EnableWebMvc // <- Controller 어노테이션이 셋팅되어 있는 클래스를 Controller로 등록한다.
 @ComponentScan(basePackages = {"chap02.controller","chap03.controller","chap04.controller","chap05.controller",
-							   "chap06.controller","chap07.controller"}) // <- 스캔할 패키지를 지정
+							   "chap06.controller","chap07.controller","chap08.controller"}) // <- 스캔할 패키지를 지정
 public class ServletAppContext implements WebMvcConfigurer{
 	
 	//Controller의 메서드가 반환하는 jsp의 이름 앞뒤에 경로와 확장자를 붙여주도록 설정한다.
