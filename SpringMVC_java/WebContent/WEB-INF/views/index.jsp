@@ -90,5 +90,14 @@
 	<h2>Chap06</h2>
 	<h4><a href="chap06/test1?data1=100&data2=200&data3=300&data3=400">test1 get</a></h4>
 	<h4><a href="chap06/test2?data1=10&data2=20&data3=30&data3=40">test2 get</a></h4>
+
+	<hr>
+	
+	<h2>Chap07</h2>
+	<h4><a href="chap07/test1?data1=100&data2=200">test1</a></h4>
+	<h4><a href="chap07/test2">test2</a></h4>
+	<h4><a href="chap07/test3">test3</a></h4>
+	<h4><a href="chap07/test4">test4</a></h4>
+	
 </body>
 </html>
