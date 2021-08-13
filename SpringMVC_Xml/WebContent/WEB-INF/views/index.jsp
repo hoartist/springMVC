@@ -99,5 +99,23 @@
 	<h4><a href="chap07/test3">test3</a></h4>
 	<h4><a href="chap07/test4">test4</a></h4>
 	
+	<hr>
+	
+	<h2>Chap08</h2>
+	
+	<form action="chap08/test1" method="post">
+		data1 : <input type="text" name="data1"/><br>
+		data2 : <input type="text" name="data2"/><br>
+		<button type="submit">확인</button>
+	</form>
+	
+	<br>
+	
+	<form action="chap08/test2" method="post">
+		data1 : <input type="text" name="data1"/><br>
+		data2 : <input type="text" name="data2"/><br>
+		<button type="submit">확인</button>
+	</form>
+	
 </body>
 </html>
