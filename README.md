@@ -1161,7 +1161,7 @@ public class ServletAppContext implements WebMvcConfigurer{
 </br>
 </br>
 
-## :bulb: 07. 커맨드 객체 이용하기
+## :bulb: 08. 커맨드 객체 이용하기
 
 
 &nbsp; :star: <b> (1) 커맨드 객체 (Command Object) </b>
