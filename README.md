@@ -949,6 +949,125 @@ public class ServletAppContext implements WebMvcConfigurer{
 
 <img src="https://user-images.githubusercontent.com/86214493/129202910-d591bb1a-ddab-479e-be47-d3c87393a881.png" width="45%" height="45%">
 
+</br>
+</br>
+</br>
+
+## :bulb: 06. 객체로 파라미터 주입받기
+
+&nbsp; :star: <b> (1) Map으로 주입받기 </b>
++ 클라이언트가 전달하는 모든 파라미터 데이터를 한번에 Map으로 받을 수 있다.
++ <b> 단 동일 명으로 전달되는 2개 이상의 파라미터는 하나만 담기게 된다. </b>
+
+```html
+	<h4><a href="chap06/test1?data1=100&data2=200&data3=300&data3=400">test1 get</a></h4>
+```
+
+```java
+	@GetMapping("/chap06/test1")
+	public String test1(@RequestParam Map<String,String> map) {
+		String data1 = map.get("data1");
+		String data2 = map.get("data2");
+		String data3 = map.get("data3");
+		
+		System.out.println("data1 : "+data1); //100
+		System.out.println("data2 : "+data2); //200
+		System.out.println("data3 : "+data3); // 300
+	
+		return "chap06/result";
+	}
+```
+
+<img src="https://user-images.githubusercontent.com/86214493/129303178-2e5f6f31-f4c3-44a9-aee3-81dc42fc6929.png" width="45%" height="45%">
+
+</br>
+
++ <b> 동일 명으로 전달되는 파라미터가 2개 이상이라면 List로 주입받아야 한다. </b>
+
+```java
+		
+	@GetMapping("/chap06/test1")
+	public String test1(@RequestParam Map<String,String> map, @RequestParam List<String> data3) {
+		String data1 = map.get("data1");
+		String data2 = map.get("data2");
+		
+		System.out.println("data1 : "+data1);
+		System.out.println("data2 : "+data2);
+		
+		for(String str : data3) {
+			System.out.println("data3 : "+str);
+		}
+	
+		return "chap06/result";
+	}
+```
+
+<img src="https://user-images.githubusercontent.com/86214493/129303347-f6a3f4dd-a6c8-45ee-9f18-8870a437e015.png" width="45%" height="45%">
+
+
+</br>
+
++ <b> Map과 List 사용시 모든 value는 String 형태로 담기게 된다. (자동 형변환 X) </b>
+
+```java
+	
+	//↓ 오류 
+	@GetMapping("/chap06/test1")
+	public String test1(@RequestParam Map<String,Integer> map, @RequestParam List<Integer> data3) {
+		
+		int data1 = map.get("data1");
+		int data2 = map.get("data2");
+		
+		System.out.println("data1 : "+data1);
+		System.out.println("data2 : "+data2);
+		
+		for(int number : data3) {
+			System.out.println("data3 : " + number);
+		}
+	
+		return "chap06/result";
+	}
+
+```
+
+<img src="https://user-images.githubusercontent.com/86214493/129303619-e1d63fbc-b6e9-432f-88e6-6dbfd5e682ed.png" width="45%" height="45%">
+
+</br>
+
+&nbsp; :star: <b> (2) @ModelAttribute </b>
++ ModelAttribute 어노테이션을 사용하면 파라미터를 객체로 주입받을 수 있다. 
++ 전달되는 파라미터의 이름과 동일한 프로퍼티에 자동으로 주입된다. ( getter, setter가 존재해야 됨)
++ 이 어노테이션은 생략이 가능함
++ <b> 커맨드 객체 (Command Object) : 클라이언트가 전달해주는 파라미터 데이터를 주입 받기 위해 사용되는 객체</b>
++ 자동으로 형변환이 이루어진다.
++ 같은 파라미터를 여러 곳에서 주입받을 수 있음 
+
+```html
+	<h4><a href="chap06/test2?data1=10&data2=20&data3=30&data3=40">test2 get</a></h4>
+```
+
+```java 
+	
+	@GetMapping("/chap06/test2")
+	public String test2(@ModelAttribute DataBean bean1, DataBean2 bean2) {
+		
+		System.out.println("data1 : "+bean1.getData1());
+		System.out.println("data2 : "+bean1.getData2());
+		
+		for(int number : bean1.getData3()) {
+			System.out.println("data3 : "+number);
+		}
+		
+		System.out.println("====================================");
+		
+		System.out.println("bean2.data1 : "+bean2.getData1());
+		System.out.println("bean2.data2 : "+bean2.getData2());
+		return "chap06/result";
+	}
+
+```
+
+<img src="https://user-images.githubusercontent.com/86214493/129304660-62a4c09a-1548-4638-9064-f4d8891aca43.png" width="45%" height="45%">
 
 
 
