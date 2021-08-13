@@ -1070,5 +1070,91 @@ public class ServletAppContext implements WebMvcConfigurer{
 <img src="https://user-images.githubusercontent.com/86214493/129304660-62a4c09a-1548-4638-9064-f4d8891aca43.png" width="45%" height="45%">
 
 
+</br>
+</br>
+</br>
+
+
+
+## :bulb: 07. ViewResolver
+
+&nbsp; :star: <b> (1) ViewResolver </b>
++ ViewResolver에 의해 JSP가 실행되고 응답결과가 만들어진다.
++ Controller에서 View를 지정할 때 ViewResolver가 사용할 데이터를 Request 영역에 저장할 수 있다. 
++ 컨트롤러에서 전달 받은 View의 이름을 토대로 jsp를 찾아 선택하고 jsp 데이터를 분석해 응답결과를 만들어 전달하는 요소
+
+&nbsp; :star: <b> (2) HttpServletRequest </b>
++ Spring MVC는 jsp를 처리할 때 HttpServletRequest 객체를 jsp 쪽으로 전달한다.
++ ViewResolver는 이를 이용해 JSP 작업시 데이터를 사용할 수 있다. 
+
+```html
+	<h4><a href="chap07/test2">test2</a></h4>
+```
+```java
+	@GetMapping("chap07/test2")
+	public String test2(HttpServletRequest request) {
+		//request 객체에 담긴 모든 데이터들은 modelAndView에 담기고 modelAndView는 viewResolver에게 전달된다.
+		request.setAttribute("data1", 10);
+		request.setAttribute("data2", 20);
+		return "chap07/test2";
+	}
+```
+
+```html
+	<!-- chap07/test2.jsp -->
+	<body>
+	
+		<h1>test2</h1>
+		<h3>data1 : ${requestScope.data1 }</h3> <!-- requestScope 생략가능 -->
+		<h3>data2 : ${requestScope.data2 }</h3>
+
+	</body>	
+```
+
+<img src="https://user-images.githubusercontent.com/86214493/129308702-acd26fb5-4bad-4eec-88ab-49e342d6a587.png" width="45%" height="45%">
+
+
+</br>
+
+
+&nbsp; :star: <b> (3) Model </b>
++ Model 객체를 주입받아 셋팅하면 HttpServletRequest 객체에 담겨 이를 JSP로 전달할 수 있다.
+
+```java
+	@GetMapping("chap07/test3")
+	public String test3(Model model) {
+		model.addAttribute("data1",300);
+		model.addAttribute("data2", 400);
+		return "chap07/test3";
+	}
+```
+
+```html
+	<body>
+		<h1>test3</h1>
+		<h3>data1 : ${requestScope.data1}</h3>
+		<h3>data1 : ${requestScope.data2}</h3>
+	</body>	
+```
+
+<img src="https://user-images.githubusercontent.com/86214493/129308991-06dacf36-0722-45f8-ab60-9aa66691a930.png" width="45%" height="45%">
+
+
+&nbsp; :star: <b> (4) ModelAndView </b>
++ ModelAndView는 Model에 값을 셋팅하는 기능과 View의 이름을 지정하는 기능을 모두 가지고 있다. 
++ String을 반환하지 않고 ModelAndView로 반환해준다. 
+```java
+	
+	@GetMapping("chap07/test4")
+	public ModelAndView test4(ModelAndView mv) {
+		
+		mv.addObject("data1", 500);
+		mv.addObject("data2", 600);
+		mv.setViewName("chap07/test4");
+		
+		return mv;
+	}
+
+```
 
 
