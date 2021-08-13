@@ -1157,4 +1157,58 @@ public class ServletAppContext implements WebMvcConfigurer{
 
 ```
 
+## :bulb: 07. 커맨드 객체 이용하기
+
+
+&nbsp; :star: <b> (1) 커맨드 객체 (Command Object) </b>
++ 클라이언트가 전달해 주는 파라미터 데이터를 주입 받기 위해 사용하는 객체 
++ 커맨드 객체는 자동으로 HttpServletRequest 객체에 자동으로 담기기때문에 따로 처리를 안해도 jsp에서 사용이 가능하다. 
++ 이 때, HttpServletReuqest 객체에 저장되는 이름을 따로 지정해주지 않으면 클래스 이름의 앞 첫글자 소문자로 저장이된다.
++ (ex. DataBean 클래스 -> dataBean , TestBean 클래스 -> testBean)
+
+</br>
+
+```java
+	
+	@PostMapping("/chap08/test1")
+	public String test1(@ModelAttribute DataBean bean) { // @ModelAttribute 생략가능
+		return "chap08/test1";
+	}
+
+```
+```html
+
+	<!-- chap08/test1.jsp -->
+	<body>
+		<h1>test1</h1>
+		<h3>data1 : ${requestScope.dataBean.data1 }</h3> <!-- requestScope 생략가능  -->
+		<h3>data2 : ${requestScope.dataBean.data2 }</h3>
+	</body>
+
+```
+
+</br>
+
++ HttpServletRequest 객체에 저장되는 이름을 지정하고 싶다면 ModelAttribute 어노테이션에 지정한다. 
+
+```java
+	@PostMapping("/chap08/test2")
+	//jsp에서 사용할 이름을 따로 지정할 경우 @ModelAttribute를 사용해야 함 (원래는 생략가능)
+	public String test2(@ModelAttribute("testData") DataBean bean) { 
+		return "chap08/test2";
+	}
+```
+
+
+```html
+	<!-- chap08/test2.jsp -->
+	<body>
+		<h1>test2</h1>
+		<h3>data1 : ${requestScope.testData.data1 }</h3>
+		<h3>data2 : ${requestScope.testData.data2 }</h3>
+	</body>
+```
+
+
+
 
